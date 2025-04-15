@@ -11,6 +11,10 @@ on: # Setting trigger for running this workflow : Our Case this workflow will ru
 jobs:
   deploy: # Defining Name of job(s)
     runs-on: ubuntu-latest # ubuntu-latest : The type of vistual host machine to run the job on` (docekr image (In Github docker image called runner))
+    env: # A map of environment variables that are available only for this job level
+      VAR1 : "Job Level Variable 1"
+      VAR2 : "Job Level Variable 2"
+
     
     steps: # Steps are collection of commands in job
     # Step 1: Checkout code : Copying code from branch into Github's vistual host machine on ubuntu-latest.
