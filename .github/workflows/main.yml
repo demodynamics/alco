@@ -49,22 +49,23 @@ jobs:
     needs  : [deploy] # Idnetifies any jobs that must complete successfully before this job run` dependency
     runs-on: ubuntu-latest
     env: # A map of environment variables that are available only for this job level
-      SUCCESS : "Deploy Succeed"
-      FAILED  : "Deploy Failed"
+      SUCCESS : "Deploy is Succeeded!"
+      FAILED  : "Deploy is Failed!"
 
     steps:
 
       - name: Deployment Success Status Message
-        if: success()
-        run : echo "${{ env.APPLICATION_NAME }} ${{ env.SUCCESS }}"
+        if  : ${{ needs.deploy.result == 'success' }}
+        run : |
+          echo "${{ env.APPLICATION_NAME }} ${{ env.SUCCESS }}"
+          echo "Deploy Package Name is ${{ env.PACKAGE_NAME }}"
 
       - name: Deployment Failed Status Message
-        if: job
-        run : echo "${{ env.APPLICATION_NAME }} ${{ env.SUCCESS }}"
+        env: # A map of environment variables that are available only for this step level
+          LOCAL_VAR: "Please Improve Your Pipeline"       
+        if  : ${{ needs.build.result == 'failure' }}
+        run : echo "${{ env.APPLICATION_NAME }} ${{ env.FAILED }}. $LOCAL_VAR"
         
-
-      - name: Package Name
-        run : echo "Deploy Package Name is ${{ env.PACKAGE_NAME }}"
         
 
 
