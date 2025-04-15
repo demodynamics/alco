@@ -7,6 +7,12 @@ on: # Setting trigger for running this workflow : Our Case this workflow will ru
   push:
     branches:
       - main
+
+permissions:
+  id-token: write
+  contents: read
+
+  
 # Starting Definening jobs
 jobs:
   deploy: # Defining Name of job(s)
