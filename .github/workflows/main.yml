@@ -8,17 +8,17 @@ on: # Setting trigger for running this workflow : Our Case this workflow will ru
   push:
     branches:
       - main
-
+# Starting Definening jobs
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  deploy: # Defining Name of job(s)
+    runs-on: ubuntu-latest # Running  ubuntu-latest enviornment on Github's VM
     
     steps:
-    # Step 1: Checkout code
+    # Step 1: Checkout code : Copying code from branch into Github's ubuntu-latest enviornment.
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Step 2: Set up AWS credentials using OIDC
+    # Step 2: Set up AWS credentials using OIDC : Configuring access to our AWS account in Github's ubuntu-latest enviornment
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
@@ -42,3 +42,6 @@ jobs:
     # Step 5: Deploy the app to EKS
     - name: Deploy to EKS
       run: kubectl apply -f k8s/deployment.yaml
+      
+  build: 
+ 
