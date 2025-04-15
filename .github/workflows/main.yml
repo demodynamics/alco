@@ -7,7 +7,7 @@ on: # Setting trigger for running this workflow : Our Case this workflow will ru
 # Starting Definening jobs
 jobs:
   deploy: # Defining Name of job(s)
-    runs-on: ubuntu-latest # Running  ubuntu-latest enviornment on Github's VM
+    runs-on: ubuntu-latest # Running Ubuntu VM enviornment on Github's using ubuntu-latest docekr image (In Github docker image called runner)
     
     steps:
     # Step 1: Checkout code : Copying code from branch into Github's ubuntu-latest enviornment.
