@@ -18,26 +18,30 @@ jobs:
       ecr_repo_name    : "front-dev"
       application_name : "${{env.APPLICATION_NAME}}-dev"
       role_session_name: "github-actions-dev"
+      eks_cluster_name : "main-dev"
+      skip_deploy_steps: true  # this skips steps
 
     secrets:
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN_ALCO_24_DEV }}
       AWS_REGION  : ${{ secrets.AWS_REGION_ALCO_24_DEV }}
 
-  deploy-prod:
-    uses: ./.github/workflows/deploy.yaml
-    with:
-      environment      : "prod"
-      ecr_repo_name    : "front-prod"
-      application_name : "alco24-prod"
-      role_session_name: "github-actions-prod"
+  # deploy-prod:
+  #   uses: ./.github/workflows/deploy.yaml
+  #   with:
+  #     environment      : "prod"
+  #     ecr_repo_name    : "front-prod"
+  #     application_name : "alco24-prod"
+  #     role_session_name: "github-actions-prod"
+  #     skip_deploy_steps: true  # this skips steps
+  #     eks_cluster_name : "main-prod"
 
-    secrets:
-      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN_ALCO_24_PROD }}
-      AWS_REGION  : ${{ secrets.AWS_REGION_ALCO_24_PROD }}
+  #   secrets:
+  #     AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN_ALCO_24_PROD }}
+  #     AWS_REGION  : ${{ secrets.AWS_REGION_ALCO_24_PROD }}
 
 
   notify:
-    needs  : [deploy-dev, deploy-prod] # Idnetifies any jobs that must complete successfully before this job run` dependency
+    needs  : [deploy-dev] # Idnetifies any jobs that must complete successfully before this job run` dependency
     runs-on: ubuntu-latest
     env: # A map of environment variables that are available only for this job level
       SUCCESS: "Deploy is Succeeded!"
@@ -45,7 +49,7 @@ jobs:
 
     steps:
       - name: Deployment Success Status Message
-        if : ${{ needs.deploy-dev.result == 'success' && needs.deploy-prod.result == 'success'}}
+        if : ${{ needs.deploy-dev.result == 'success'}}
         run: |
           echo "${{ env.APPLICATION_NAME }} ${{ env.SUCCESS }}"
           echo "Deployed Package Tag is ${{ env.PACKAGE_HASH }}"
