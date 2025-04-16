@@ -5,7 +5,7 @@ env: # A map of environment variables that are available to all jobs and steps i
   ROLE_ARN          : "arn:aws:iam::<AWS_ACCOUNT_ID>:role/<GITHUB_OIDC_ROLE>"
   ROLE_SESSION_NAME : "github-actions"
   REGION            : "us-east-1"
-  ECR_REPO_NAME     : ""
+  ECR_REPO_NAME     : "front"
 
 on: # Setting trigger for running this workflow : Our Case this workflow will runs everytime when we will make push to main branch of this repository
   push:
@@ -45,8 +45,8 @@ jobs:
           REPOSITORY: ${{ env.ECR_REPO_NAME }}
           IMAGE_TAG : ${{ github.sha }}
       run: | # Runs the command line programs using the operating system's shell. Pipe (|) allows run multiple commands in one step
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker build -t $REGISTRY/${{ env.APPLICATION_NAME }}-$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/${{ env.APPLICATION_NAME }}-$REPOSITORY:$IMAGE_TAG
 
     # Step 4: Update kubeconfig to interact with EKS
     - name: Update kubeconfig
