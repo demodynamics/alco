@@ -1,10 +1,9 @@
 name: Deploy to EKS
 
 env: # A map of environment variables that are available to all jobs and steps in the workflow
-  APPLICATION_NAME : "alco24"
-  PACKAGE_NAME     : "alco24-ver-${{ github.sha }}" # github.sha - current running commit's hash (Everytime when you make a commit to save your work, Git creates a unique ID (a.k.a. the "SHA" or "hash") that allows you to keep record under that hash)
-  ROLE_SESSION_NAME: "github-actions"
-
+  APPLICATION_NAME  : "alco24"
+  PACKAGE_HASH      : "${{ github.sha }}" # github.sha - current running commit's hash (Everytime when you make a commit to save your work, Git creates a unique ID (a.k.a. the "SHA" or "hash") that allows you to keep record under that hash)
+  
 on:
   push:
     branches:
@@ -15,22 +14,27 @@ jobs:
   deploy-dev:
     uses: ./.github/workflows/deploy.yaml
     with:
-      environment      : dev
-      ecr_repo         : front
-      application_name : ${{ env.APPLICATION_NAME }}  # pass it explicitly
+      environment      : "dev"
+      ecr_repo_name    : "front-dev"
+      application_name : "${{env.APPLICATION_NAME}}-dev"
+      role_session_name: "github-actions-dev"
 
     secrets:
-      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN_ALCO_24 }}
-      AWS_REGION  : ${{ secrets.AWS_REGION_ALCO_24 }}
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN_ALCO_24_DEV }}
+      AWS_REGION  : ${{ secrets.AWS_REGION_ALCO_24_DEV }}
 
   deploy-prod:
     uses: ./.github/workflows/deploy.yaml
     with:
-      environment: prod
-      ecr_repo   : front
+      environment      : "prod"
+      ecr_repo_name    : "front-prod"
+      application_name : "alco24-prod"
+      role_session_name: "github-actions-prod"
+
     secrets:
-      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN_ALCO_24 }}
-      AWS_REGION  : ${{ secrets.AWS_REGION_ALCO_24 }}
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN_ALCO_24_PROD }}
+      AWS_REGION  : ${{ secrets.AWS_REGION_ALCO_24_PROD }}
+
 
   notify:
     needs  : [deploy-dev, deploy-prod] # Idnetifies any jobs that must complete successfully before this job run` dependency
@@ -44,7 +48,7 @@ jobs:
         if : ${{ needs.deploy-dev.result == 'success' && needs.deploy-prod.result == 'success'}}
         run: |
           echo "${{ env.APPLICATION_NAME }} ${{ env.SUCCESS }}"
-          echo "Deployed Package Name is ${{ env.PACKAGE_NAME }}"
+          echo "Deployed Package Tag is ${{ env.PACKAGE_HASH }}"
 
       - name: Deployment Failed Status Message
         env: # A map of environment variables that are available only for this step level
