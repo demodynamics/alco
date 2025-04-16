@@ -22,6 +22,11 @@ on: # Setting trigger for running this workflow : Our Case this workflow will ru
         description: 'Name of EKS Cluster'
         required: true
         type: string
+      skip_deploy_steps:
+        description: 'If true, skips the kubeconfig and kubectl apply steps'
+        required: false
+        default: false
+        type: boolean
     secrets:
       AWS_ROLE_ARN:
         required: true
@@ -66,10 +71,12 @@ jobs:
 
     # Step 4: Update kubeconfig to interact with EKS
     - name: Update kubeconfig
+      if: ${{ inputs.skip_deploy_steps != true }}
       run : aws eks update-kubeconfig --name ${{ inputs.eks_cluster_name }} --region ${{ secrets.AWS_REGION }} 
 
     # Step 5: Deploy the app to EKS
     - name: Deploy to EKS
+      if: ${{ inputs.skip_deploy_steps != true }}
       run : kubectl apply -f k8s/deployment.yaml 
   
   
