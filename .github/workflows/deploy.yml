@@ -1,17 +1,32 @@
-name: Deploy to EKS # Name of Workflow
-env: # A map of environment variables that are available to all jobs and steps in the workflow
-  APPLICATION_NAME  : "alco24"
-  PACKAGE_NAME      : "alco24-ver-${{ github.sha }}" # github.sha - current running commit's hash (Everytime when you make a commit to save your work, Git creates a unique ID (a.k.a. the "SHA" or "hash") that allows you to keep record under that hash)
-  ROLE_ARN          : "arn:aws:iam::<AWS_ACCOUNT_ID>:role/<GITHUB_OIDC_ROLE>"
-  ROLE_SESSION_NAME : "github-actions"
-  REGION            : "us-east-1"
-  ECR_REPO_NAME     : "front"
-
+name: Deploy to EKS (Reusable) # Name of Workflow
 on: # Setting trigger for running this workflow : Our Case this workflow will runs everytime when we will make push to main branch of this repository
-  push:
-    branches:
-      - main
-  workflow_dispatch: # This lets you manually run your pipeline from the GitHub Actions UI. Without it, your workflow runs only on push or pull_request. But sometimes, you want to trigger it yourself.
+  workflow_call:
+    inputs:
+      environment:
+        description: 'The environment to deploy to (e.g., dev, prod)'
+        required: true
+        type: string
+      ecr_repo_name:
+        description: 'The name of the Private ECR repository'
+        required: true
+        type: string
+      role_session_name:
+        description: 'IAM Role Session name'
+        required: true
+        type: string
+      application_name:
+        description: 'Name of App'
+        required: true
+        type: string
+      eks_cluster_name:
+        description: 'Name of EKS Cluster'
+        required: true
+        type: string
+    secrets:
+      AWS_ROLE_ARN:
+        required: true
+      AWS_REGION:
+        required: true
 
 permissions:
   id-token: write
@@ -31,9 +46,9 @@ jobs:
     - name: Configure AWS credentials # Name of step
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        role-to-assume    : ${{ env.ROLE_ARN }}
-        role-session-name : ${{ env.ROLE_SESSION_NAME }}
-        aws-region        : ${{ env.REGION }}
+        role-to-assume    : ${{ secrets.AWS_ROLE_ARN }}
+        role-session-name : ${{ inputs.role_session_name }}
+        aws-region        : ${{ secrets.AWS_REGION }}
 
     # Step 3: Set up Docker and push the image to ECR (if not already pushed)
     - name: Log in to Amazon ECR # Name of step
@@ -43,42 +58,18 @@ jobs:
     - name: Build, tag, and push docker image to Amazon ECR
       env:
           REGISTRY  : ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: ${{ env.ECR_REPO_NAME }}
+          REPOSITORY: ${{ inputs.ecr_repo }}
           IMAGE_TAG : ${{ github.sha }}
       run: | # Runs the command line programs using the operating system's shell. Pipe (|) allows run multiple commands in one step
-          docker build -t $REGISTRY/${{ env.APPLICATION_NAME }}-$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/${{ env.APPLICATION_NAME }}-$REPOSITORY:$IMAGE_TAG
+          docker build -t $REGISTRY/${{ inputs.application_name }}-$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/${{ inputs.application_name }}-$REPOSITORY:$IMAGE_TAG
 
     # Step 4: Update kubeconfig to interact with EKS
     - name: Update kubeconfig
-      run : aws eks update-kubeconfig --name <EKS_CLUSTER_NAME> --region <AWS_REGION> 
+      run : aws eks update-kubeconfig --name <EKS_CLUSTER_NAME> --region ${{ secrets.AWS_REGION }} 
 
     # Step 5: Deploy the app to EKS
     - name: Deploy to EKS
       run : kubectl apply -f k8s/deployment.yaml 
   
-  notify:
-    needs  : [deploy] # Idnetifies any jobs that must complete successfully before this job run` dependency
-    runs-on: ubuntu-latest
-    env: # A map of environment variables that are available only for this job level
-      SUCCESS : "Deploy is Succeeded!"
-      FAILED  : "Deploy is Failed!"
-
-    steps:
-
-      - name: Deployment Success Status Message
-        if  : ${{ needs.deploy.result == 'success' }}
-        run : |
-          echo "${{ env.APPLICATION_NAME }} ${{ env.SUCCESS }}"
-          echo "Deployed Package Name is ${{ env.PACKAGE_NAME }}"
-
-      - name: Deployment Failed Status Message
-        env: # A map of environment variables that are available only for this step level
-          LOCAL_VAR: "Please Improve Your Pipeline"       
-        if  : ${{ needs.deploy.result == 'failure' }}
-        run : echo "${{ env.APPLICATION_NAME }} ${{ env.FAILED }}. $LOCAL_VAR"
-        
-        
-
-
-      
+  
