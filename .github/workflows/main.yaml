@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
+  workflow_dispatch:  # This lets you manually run your pipeline from the GitHub Actions UI. Without it, your workflow runs only on push or pull_request. But sometimes, you want to trigger it yourself.
 
 jobs:
   deploy-dev:
