@@ -11,7 +11,7 @@ on: # Setting trigger for running this workflow : Our Case this workflow will ru
   push:
     branches:
       - main
-  workflow_dispatch:
+  workflow_dispatch: # This lets you manually run your pipeline from the GitHub Actions UI. Without it, your workflow runs only on push or pull_request. But sometimes, you want to trigger it yourself.
 
 permissions:
   id-token: write
