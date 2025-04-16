@@ -3,12 +3,16 @@ name: Deploy to EKS
 env: # A map of environment variables that are available to all jobs and steps in the workflow
   APPLICATION_NAME  : "alco24"
   PACKAGE_HASH      : "${{ github.sha }}" # github.sha - current running commit's hash (Everytime when you make a commit to save your work, Git creates a unique ID (a.k.a. the "SHA" or "hash") that allows you to keep record under that hash)
-  
+
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch: # This lets you manually run your pipeline from the GitHub Actions UI. Without it, your workflow runs only on push or pull_request. But sometimes, you want to trigger it yourself.
+
+  
+# on:
+#   push:
+#     branches:
+#       - main
+#   workflow_dispatch: # This lets you manually run your pipeline from the GitHub Actions UI. Without it, your workflow runs only on push or pull_request. But sometimes, you want to trigger it yourself.
 
 jobs:
   deploy-dev:
