@@ -63,7 +63,7 @@ jobs:
     - name: Build, tag, and push docker image to Amazon ECR
       env:
           REGISTRY  : ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: ${{ inputs.ecr_repo }}
+          REPOSITORY: ${{ inputs.ecr_repo_name }}
           IMAGE_TAG : ${{ github.sha }}
       run: | # Runs the command line programs using the operating system's shell. Pipe (|) allows run multiple commands in one step
           docker build -t $REGISTRY/${{ inputs.application_name }}-$REPOSITORY:$IMAGE_TAG .
