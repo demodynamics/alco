@@ -16,7 +16,7 @@ on:
 
 jobs:
   deploy-dev:
-    uses: ./.github/workflows/build-deploy.yaml
+    uses: ./.github/workflows/build-deploy.yml
     with:
       environment      : "dev"
       ecr_repo_name    : "front-dev"
