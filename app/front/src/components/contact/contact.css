@@ -1,0 +1,39 @@
+.contact {
+    top: 0;
+    width: 100%;
+    height: calc(400px + (600 - 400) * ((100vw - 320px) / (1800 - 320)));
+    background-color: white;
+    padding-top: calc(20px + (50 - 20) * ((100vw - 320px) / (1800 - 320)));
+}
+
+.contact_div {
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.contact_div>h1 {
+    font-size: calc(18px + (40 - 18) * ((100vw - 320px) / (1800 - 320)));
+}
+
+.contact_div>p {
+    margin-top: calc(30px + (80 - 30) * ((100vw - 320px) / (1800 - 320)));
+}
+
+.map_div {
+    margin-bottom: calc(20px + (80 - 20) * ((100vw - 320px) / (1800 - 320)));
+}
+
+.connect {
+    cursor: pointer;
+    margin-top: 30px;
+    font-size: calc(16px + (50 - 16) * ((100vw - 320px) / (1800 - 320)));
+}
+
+
+.tel_number_contact {
+    cursor: pointer;
+    text-decoration-line: none;
+    color: black;
+    font-size: calc(30px + (50 - 30) * ((100vw - 320px) / (1800 - 320)));
+}

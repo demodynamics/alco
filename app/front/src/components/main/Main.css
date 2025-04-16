@@ -1,0 +1,59 @@
+.mainFoto {
+    height: 100vh !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.divText>p {
+    font-size: calc(35px + (60 - 35) * ((100vw - 320px) / (1800 - 320)));
+    color: white;
+    text-align: center;
+}
+
+.button_telegram, .button_one_click {
+    background-color: #1be691;
+}
+
+.tel_number_main {
+    text-decoration-line: none;
+    color: azure;
+    font-size: calc(30px + (50 - 30) * ((100vw - 320px) / (1800 - 320)));
+}
+
+.divText {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.telegram_icon {
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-size: 3rem;
+    position: fixed;
+    bottom: 50px;
+    left: 50px;
+    width: 50px;
+    height: 50px;
+    background: #1be691;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.button_telegram {
+    display: block;
+    margin: 0 auto;
+
+}
+
+.telegram_button_icon {
+    font-size: 2rem;
+}
+
+.button_one_click {
+    display: block;
+    margin: 20px auto;
+    width: 242.88px;
+}

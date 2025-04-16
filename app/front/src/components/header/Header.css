@@ -1,0 +1,100 @@
+.navbar {
+    -webkit-box-shadow: 0px 10px 13px -7px #1be691, 2px 13px 17px 13px rgba(0, 0, 0, 0);
+    box-shadow: 0px 10px 13px -7px #1be691, 2px 13px 17px 13px rgba(0, 0, 0, 0);
+    background-color: #1be691 !important;
+}
+
+.navbar>.container {
+    padding: 0;
+}
+
+.navbar-nav>a {
+    font-weight: bold;
+    font-size: calc(13px + (20 - 13) * ((100vw - 320px) / (1800 - 320)));
+    color: rgb(255, 255, 255) !important;
+}
+
+.navbar-brand {
+    font-size: calc(20px + (28 - 20) * ((100vw - 320px) / (1800 - 320)));
+    cursor: pointer;
+    z-index: 5 !important;
+}
+
+.opaque {
+    background-color: rgba(34, 233, 117, 0.8) !important;
+    transition: background-color 0.3s ease;
+}
+
+.container {
+    margin: 0 auto !important;
+}
+
+.telegram_icon_header {
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-size: 3rem;
+    bottom: 30px;
+    right: 30px;
+    width: 30px;
+    height: 30px;
+    background: #1be691;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.tel_number {
+    text-decoration-line: none;
+    color: azure;
+    font-size: calc(13px + (25 - 13) * ((100vw - 320px) / (1800 - 320)));
+}
+
+.header_number>p {
+    font-size: 13px;
+}
+
+.basket_icon_header {
+    color: #fcfeff;
+    font-size: 26px;
+
+}
+
+.basket_icon_header:hover {
+    color: rgb(255, 255, 255);
+
+}
+
+.a_basket_icon_header {
+    padding: 5px;
+    border: 1px solid #fdfdfd;
+}
+
+.a_basket_icon_header:hover {
+    border: 1px solid rgb(255, 255, 255);
+}
+
+
+@media only screen and (max-width : 992px) {
+    .a_basket_icon_header {
+        width: 40px;
+    }
+
+    .navbar-brand {
+        margin-left: 20px;
+    }
+
+    .navbar-toggler {
+        margin-right: 10px;
+    }
+}
+
+@media only screen and (max-width : 580px) {
+
+    .navbar-nav>a {
+        margin-left: 20px;
+    }
+
+    .header_number {
+        margin-left: 20px;
+    }
+
+}
