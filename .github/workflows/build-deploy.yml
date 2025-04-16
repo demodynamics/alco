@@ -62,8 +62,8 @@ jobs:
           REPOSITORY: ${{ inputs.ecr_repo_name }}
           IMAGE_TAG : ${{ github.sha }}
       run: | # Runs the command line programs using the operating system's shell. Pipe (|) allows run multiple commands in one step
-          docker build -t $REGISTRY/${{ inputs.application_name }}-$REPOSITORY:$IMAGE_TAG ./app/front
-          docker push $REGISTRY/${{ inputs.application_name }}-$REPOSITORY:$IMAGE_TAG
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG ./app/front
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
     # Step 4: Update kubeconfig to interact with EKS
     - name: Update kubeconfig
