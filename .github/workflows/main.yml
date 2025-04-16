@@ -1,7 +1,10 @@
 name: Deploy to EKS # Name of Workflow
 env: # A map of environment variables that are available to all jobs and steps in the workflow
-  APPLICATION_NAME : "alco24"
-  PACKAGE_NAME     : "alco24-deploy-ver-${{ github.sha }}" # github.sha - current running commit's hash (Everytime when you make a commit to save your work, Git creates a unique ID (a.k.a. the "SHA" or "hash") that allows you to keep record under that hash)
+  APPLICATION_NAME  : "alco24"
+  PACKAGE_NAME      : "alco24-deploy-ver-${{ github.sha }}" # github.sha - current running commit's hash (Everytime when you make a commit to save your work, Git creates a unique ID (a.k.a. the "SHA" or "hash") that allows you to keep record under that hash)
+  ROLE_ARN          : "arn:aws:iam::<AWS_ACCOUNT_ID>:role/<GITHUB_OIDC_ROLE>"
+  ROLE_SESSION_NAME : "github-actions"
+  REGION            : "us-east-1"
 
 on: # Setting trigger for running this workflow : Our Case this workflow will runs everytime when we will make push to main branch of this repository
   push:
@@ -11,7 +14,6 @@ on: # Setting trigger for running this workflow : Our Case this workflow will ru
 permissions:
   id-token: write
   contents: read
-
   
 # Starting Definening jobs
 jobs:
@@ -22,21 +24,18 @@ jobs:
     # Step 1: Checkout code : Copying code from branch into Github's vistual host machine on ubuntu-latest.
     - name: Checkout code # Name of step
       uses: actions/checkout@v2  #uses: Selects an action to run as part of a step in job
-      env: # A map of environment variables that are available only for this step level
-        LOCAL_VAR1 : "Step Levele Var1"
-        LOCAL_VAR2 : "Step Levele Var2"
 
     # Step 2: Set up AWS credentials using OIDC : Configuring access to our AWS account in Github's ubuntu-latest enviornment
     - name: Configure AWS credentials # Name of step
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        role-to-assume: arn:aws:iam::<AWS_ACCOUNT_ID>:role/<GITHUB_OIDC_ROLE>
-        role-session-name: github-actions
-        aws-region: <AWS_REGION>
+        role-to-assume: ${{ env.ROLE_ARN }}
+        role-session-name: ${{ENV.ROLE_SESSION_NAME}}
+        aws-region: ${{ env.REGION }}
 
     # Step 3: Set up Docker and push the image to ECR (if not already pushed)
     - name: Log in to Amazon ECR # Name of step
-      uses: aws-actions/amazon-ecr-login@v1
+      uses: aws-actions/amazon-ecr-login@v2
 
     - name: Build and push Docker image
       run: | # Runs the command line programs using the operating system's shell. Pipe (|) allows run multiple commands in one step
