@@ -1,5 +1,9 @@
 name: Deploy to EKS
 
+permissions:
+  id-token: write       # 🔐 Needed for OIDC (AWS/GCP auth)
+  contents: read        # 📁 Usually required for checking out the repo
+
 env: # A map of environment variables that are available to all jobs and steps in the workflow
   APPLICATION_NAME  : "alco24"
   PACKAGE_HASH      : "${{ github.sha }}" # github.sha - current running commit's hash (Everytime when you make a commit to save your work, Git creates a unique ID (a.k.a. the "SHA" or "hash") that allows you to keep record under that hash)
