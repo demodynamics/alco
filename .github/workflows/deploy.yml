@@ -66,7 +66,7 @@ jobs:
 
     # Step 4: Update kubeconfig to interact with EKS
     - name: Update kubeconfig
-      run : aws eks update-kubeconfig --name <EKS_CLUSTER_NAME> --region ${{ secrets.AWS_REGION }} 
+      run : aws eks update-kubeconfig --name ${{ inputs.eks_cluster_name }} --region ${{ secrets.AWS_REGION }} 
 
     # Step 5: Deploy the app to EKS
     - name: Deploy to EKS
