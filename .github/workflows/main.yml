@@ -11,6 +11,7 @@ on: # Setting trigger for running this workflow : Our Case this workflow will ru
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   id-token: write
@@ -74,7 +75,7 @@ jobs:
       - name: Deployment Failed Status Message
         env: # A map of environment variables that are available only for this step level
           LOCAL_VAR: "Please Improve Your Pipeline"       
-        if  : ${{ needs.build.result == 'failure' }}
+        if  : ${{ needs.deploy.result == 'failure' }}
         run : echo "${{ env.APPLICATION_NAME }} ${{ env.FAILED }}. $LOCAL_VAR"
         
         
