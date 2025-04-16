@@ -20,7 +20,7 @@ jobs:
     with:
       environment      : "dev"
       ecr_repo_name    : "front-dev"
-      application_name: "${{ format('{0}-dev', env.APPLICATION_NAME) }}"
+      application_name : "alco24"
       role_session_name: "github-actions-dev"
       eks_cluster_name : "main-dev"
       skip_deploy_steps: true  # this skips steps
