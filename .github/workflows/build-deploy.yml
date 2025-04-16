@@ -14,10 +14,6 @@ on: # Setting trigger for running this workflow : Our Case this workflow will ru
         description: 'IAM Role Session name'
         required: true
         type: string
-      application_name:
-        description: 'Name of App'
-        required: true
-        type: string
       eks_cluster_name:
         description: 'Name of EKS Cluster'
         required: true
@@ -62,8 +58,8 @@ jobs:
           REPOSITORY: ${{ inputs.ecr_repo_name }}
           IMAGE_TAG : ${{ github.sha }}
       run: | # Runs the command line programs using the operating system's shell. Pipe (|) allows run multiple commands in one step
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG ./app/front
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker build -t $REGISTRY/$REPOSITORY:$REPOSITORY-$IMAGE_TAG ./app/front
+          docker push $REGISTRY/$REPOSITORY:$REPOSITORY-$IMAGE_TAG
 
     # Step 4: Update kubeconfig to interact with EKS
     - name: Update kubeconfig
