@@ -34,8 +34,8 @@ on: # Setting trigger for running this workflow : Our Case this workflow will ru
         required: true
 
 permissions:
-  id-token: write
-  contents: read
+  id-token: write       # 🔐 Needed for OIDC (AWS/GCP auth)
+  contents: read        # 📁 Usually required for checking out the repo
   
 # Starting Definening jobs
 jobs:
