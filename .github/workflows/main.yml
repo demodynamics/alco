@@ -64,5 +64,5 @@ jobs:
       - name: Deployment Failed Status Message
         env: # A map of environment variables that are available only for this step level
           LOCAL_VAR: "Please Improve Your Pipeline"
-        if : ${{ needs.deploy-dev.result == 'failure' && needs.deploy-prod.result == 'failure'}}
+        if : ${{ needs.deploy-dev.result == 'failure' || needs.deploy-prod.result == 'failure'}}
         run: echo "${{ env.APPLICATION_NAME }} ${{ env.FAILED }}. $LOCAL_VAR"
